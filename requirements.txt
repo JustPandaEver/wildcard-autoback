@@ -1,0 +1,4 @@
+cryptocode
+requests
+webbrowser
+hashlib
