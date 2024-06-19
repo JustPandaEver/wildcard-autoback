@@ -108,7 +108,7 @@ def log():
     if(os.name == 'nt'):
         webbrowser.open(urlny)
     else:
-        c.get(urlny,headers=head).txt
+        c.get(urlny,headers=head).text
         os.system("xdg-open "+urlny)
     return head,login["channel_token"]
 
