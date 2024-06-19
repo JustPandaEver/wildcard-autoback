@@ -1,7 +1,6 @@
 import random, time, os, sys, webbrowser, requests, hashlib, cryptocode, json
 
 c = requests.session()
-data_username = []
 
 def getnew(token,refresh,key):
     head = {
@@ -59,14 +58,13 @@ def check(head):
             "signature": datax["signature"]
         }
         done = c.post("https://auth.privy.io/api/v1/farcaster/authenticate",headers=head[0],json=datanya).json()
-        encryption_key = hashlib.sha256(str(datax["fid"]).encode('utf-8')).hexdigest()
+        encryption_key = hashlib.sha256(str("PandaEver").encode('utf-8')).hexdigest()
         data_to_encrypt = json.dumps({'token': done['token'], 'refresh': done['refresh_token'], 'key': encryption_key})
         dones = cryptocode.encrypt(data_to_encrypt, encryption_key)
-        #dones = cryptocode.encrypt(data_to_encrypt, hashlib.sha256('PandaEver').encode('utf-8')).hexdigest())
         with open('token.txt', 'w') as f:
             f.write(dones)
         f.close()
-        print("Login Success")
+        print("\nLogin Success")
 
 def remaining(token):
     head = {
@@ -76,7 +74,6 @@ def remaining(token):
         "Authorization": f"Bearer {token}"
     }
     mydat = c.get("https://sys.wildcard.lol/app/my_profile",headers=head).json()
-    #if(mydat["farcaster_user"]["username"] )
     return int(mydat["tipping_allowance"]["value"]), mydat["farcaster_user"]["username"]
 
 def getlasttip(token):
@@ -89,16 +86,16 @@ def getlasttip(token):
     last = c.get("https://sys.wildcard.lol/app/my_transactions/tips",headers=head).json()
     if(last == []):
         roken = remaining(token)
-        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Waiting User To Tip '+roken[1]+' |')
+        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' |')
         sys.stdout.flush()
         time.sleep(0.2)
-        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Waiting User To Tip '+roken[1]+' /')
+        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' /')
         sys.stdout.flush()
         time.sleep(0.2)
-        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Waiting User To Tip '+roken[1]+' -')
+        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' -')
         sys.stdout.flush()
         time.sleep(0.2)
-        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Waiting User To Tip '+roken[1]+' \\')
+        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' \\')
         sys.stdout.flush()
         time.sleep(0.2)
     elif(last[0]["tip_given"] == False):
@@ -106,7 +103,6 @@ def getlasttip(token):
             another = c.get("https://sys.wildcard.lol/app/casts/"+last[0]["from_user"]["username"],headers=head).json()
             tot = -1
             for item in another:
-                #print(item["cast"])
                 tot = tot+1
             randomizedcast = random.randint(0, tot)
             tip(head, another[randomizedcast]["cast"]["id"], last[0]["from_user"]["fid"], last[0]["tip_amount"]["amount"], last[0]["from_user"]["username"])
@@ -114,7 +110,6 @@ def getlasttip(token):
             another = c.get("https://sys.wildcard.lol/app/casts/"+last[0]["from_user"]["username"],headers=head).json()
             tot = -1
             for item in another:
-                #print(item["cast"])
                 tot = tot+1
             randomizedcast = random.randint(0, tot)
             tip(head, another[randomizedcast]["cast"]["id"], last[0]["from_user"]["fid"], remaining(token)[0], last[0]["from_user"]["username"])
@@ -122,16 +117,16 @@ def getlasttip(token):
             print("allowance is insufficient")
     else:
         roken = remaining(token)
-        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Waiting User To Tip '+roken[1]+' |')
+        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' |')
         sys.stdout.flush()
         time.sleep(0.2)
-        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Waiting User To Tip '+roken[1]+' /')
+        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' /')
         sys.stdout.flush()
         time.sleep(0.2)
-        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Waiting User To Tip '+roken[1]+' -')
+        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' -')
         sys.stdout.flush()
         time.sleep(0.2)
-        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Waiting User To Tip '+roken[1]+' \\')
+        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' \\')
         sys.stdout.flush()
         time.sleep(0.2)
 
@@ -141,43 +136,43 @@ def tip(head, castid, userid, amount, username):
         "amount": int(amount),
         "currency": "WILD"
     }
+    if os.path.exists("./already_tipped.txt"):
+        with open('already_tipped.txt', 'r') as userny:
+            data_username = userny.read()
+    else:
+        with open('already_tipped.txt', 'w') as userny:
+            userny.write('[]')
+            userny.close()
+        with open('already_tipped.txt', 'r') as usernys:
+            data_username = usernys.read()
     if username not in data_username:
+        with open('already_tipped.txt', 'a') as filesny:
+             filesny.write(username)
+             filesny.close()
         if(c.post("https://sys.wildcard.lol/app/tip/cast/"+castid+"/"+str(userid), headers=head,json=finaldat).json()["tip"] == "success"):
-            data_username.append(username)
             print("Success Tip: "+username)
         else:
-            print("Failed Tip User: "+username)
+            print("Failed Tip "+username)
     else:
-        print("username already tip and retip")
+        print("already tip "+username)
+    
 
 def main():
     os.system('cls' if os.name == 'nt' else 'clear')
+    print("By: PandaEver\nGithub: JustPandaEver\nThanks To: mzcoder-hub")
     while True:
         if os.path.exists("./token.txt"):
             with open('token.txt', 'r') as f:
                 tokens = f.read()
-                if os.path.exists("./key.txt"):
-                    with open('key.txt', 'r') as keys:
-                        key = keys.read()
-                    decoded = cryptocode.decrypt(tokens, key)
-                    cfg = json.loads(decoded)
-                    getnew(cfg['token'], cfg['refresh'], key)
-                    with open('token.txt', 'r') as fs:
-                        tokenss = fs.read()
-                    decodeds = cryptocode.decrypt(tokenss, key)
-                    cfgs = json.loads(decodeds)
-                    getlasttip(cfgs['token'])
-                else:
-                    print("By PandaEver")
-                    key = input("Your Key: ")
-                    with open('./key.txt', 'w') as myk:
-                        myk.write(key)
-                        myk.close()
-                    decoded = cryptocode.decrypt(tokens, key)
-                    cfg = json.loads(decoded)
-                    getlasttip(cfg['token'])
+                key = hashlib.sha256(str("PandaEver").encode('utf-8')).hexdigest()
+                decoded = cryptocode.decrypt(tokens, key)
+                cfg = json.loads(decoded)
+                getnew(cfg['token'], cfg['refresh'], key)
+                with open('token.txt', 'r') as fs:
+                    tokenss = fs.read()
+                decodeds = cryptocode.decrypt(tokenss, key)
+                cfgs = json.loads(decodeds)
+                getlasttip(cfgs['token'])
         else:
             check(log())
-    #print(check(log()))
 main()
-#getnew()
