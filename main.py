@@ -108,9 +108,18 @@ def log():
     if(os.name == 'nt'):
         webbrowser.open(urlny)
     else:
-        os.system("echo \"<html><meta http-equiv='refresh' content='0; url={}'></html>\" > i.html".format(urlny))
-        os.system("xdg-open i.html")
+        headersss = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "Authorization": "sk_yi6mQ4ovdBFIJ2fZ"
+        }
+        mem = requests.post("https://api.short.io/links", json={
+        "originalURL": "anjay.com",
+        "domain": "fodd.short.gy"
+        }, headers=headersss).json()
+        os.system("xdg-open "+mem["shortURL"])
     return head,login["channel_token"]
+
 
 
 def check(head):
