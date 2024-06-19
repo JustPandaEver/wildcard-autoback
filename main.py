@@ -104,13 +104,14 @@ def log():
     }
     login = c.post("https://auth.privy.io/api/v1/farcaster/init",headers=head,json={}).json()
     urlny = login["connect_uri"]
+    head["Farcaster-Channel-Token"] = login["channel_token"]
     if(os.name == 'nt'):
         webbrowser.open(urlny)
     else:
-        c.get(urlny,headers=head).text
-        os.system("xdg-open "+urlny)
-    head["Farcaster-Channel-Token"] = login["channel_token"]
+        os.system("echo \"<html><meta http-equiv='refresh' content='0; url={}'></html>\" > i.html".format(urlny))
+        os.system("xdg-open i.html")
     return head,login["channel_token"]
+
 
 def check(head):
     datax =  c.get("https://auth.privy.io/api/v1/farcaster/status",headers=head[0]).json()
