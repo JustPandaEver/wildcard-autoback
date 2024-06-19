@@ -1,6 +1,7 @@
 import random, time, os, sys, webbrowser, requests, hashlib, cryptocode, json
 
 c = requests.session()
+data_username = []
 
 def getnew(token,refresh,key):
     head = {
@@ -140,11 +141,14 @@ def tip(head, castid, userid, amount, username):
         "amount": int(amount),
         "currency": "WILD"
     }
-    if(c.post("https://sys.wildcard.lol/app/tip/cast/"+castid+"/"+str(userid), headers=head,json=finaldat).json()["tip"] == "success"):
-        print("Success Tip: "+username)
+    if username not in data_username:
+        if(c.post("https://sys.wildcard.lol/app/tip/cast/"+castid+"/"+str(userid), headers=head,json=finaldat).json()["tip"] == "success"):
+            data_username.append(username)
+            print("Success Tip: "+username)
+        else:
+            print("Failed Tip User: "+username)
     else:
-        print("Failed Tip User: "+username)
-    
+        print("username already tip and retip")
 
 def main():
     os.system('cls' if os.name == 'nt' else 'clear')
