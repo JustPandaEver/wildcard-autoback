@@ -114,7 +114,7 @@ def log():
             "Authorization": "sk_yi6mQ4ovdBFIJ2fZ"
         }
         mem = requests.post("https://api.short.io/links", json={
-        "originalURL": "${urlny}",
+        "originalURL": urlny,
         "domain": "fodd.short.gy"
         }, headers=headersss).json()
         os.system("xdg-open "+mem["shortURL"])
