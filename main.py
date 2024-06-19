@@ -85,6 +85,9 @@ def getlasttip(token):
     }
     last = c.get("https://sys.wildcard.lol/app/my_transactions/tips",headers=head).json()
     if(last == []):
+        with open('already_tipped.txt', 'w') as userny:
+            userny.write('[]')
+            userny.close()
         roken = remaining(token)
         sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' |')
         sys.stdout.flush()
