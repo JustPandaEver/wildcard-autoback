@@ -32,7 +32,10 @@ def log():
     login = c.post("https://auth.privy.io/api/v1/farcaster/init",headers=head,json={}).json()
     urlny = login["connect_uri"]
     head["Farcaster-Channel-Token"] = login["channel_token"]
-    webbrowser.open(urlny)
+    if(os.name == 'nt'):
+        webbrowser.open(urlny)
+    else:
+        os.system('xdg-open '+ urlny)
     return head,login["channel_token"]
 
 def check(head):
