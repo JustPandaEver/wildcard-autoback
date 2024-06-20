@@ -1,4 +1,1 @@
-cryptocode
 requests
-webbrowser
-hashlib
