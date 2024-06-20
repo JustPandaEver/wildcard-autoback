@@ -222,6 +222,7 @@ def getlasttip(token):
 
 
 def tip(head, castid, userid, amount, username):
+    time.sleep(3)
     finaldat = {
         "amount": int(amount),
         "currency": "WILD"
@@ -239,6 +240,7 @@ def tip(head, castid, userid, amount, username):
         with open('already_tipped.txt', 'a') as filesny:
              filesny.write(username)
              filesny.close()
+        time.sleep(5)
         if(c.post("https://sys.wildcard.lol/app/tip/cast/"+castid+"/"+str(userid), headers=head,json=finaldat).json()["tip"] == "success"):
             print("Success Tip: "+username)
         else:
