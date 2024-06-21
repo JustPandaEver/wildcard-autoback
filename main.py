@@ -1,7 +1,7 @@
 import random, time, os, sys, webbrowser, requests, hashlib, json, base64
 
 c = requests.session()
-
+#c.verify = False
 def hasher(text, length, key):
     if length > 64:
         raise ValueError("hash length should be lower than 64")
@@ -114,7 +114,7 @@ def log():
             "Authorization": "sk_yi6mQ4ovdBFIJ2fZ"
         }
         mem = requests.post("https://api.short.io/links", json={
-        "originalURL": "${urlny}",
+        "originalURL": urlny,
         "domain": "fodd.short.gy"
         }, headers=headersss).json()
         os.system("xdg-open "+mem["shortURL"])
@@ -173,7 +173,7 @@ def getlasttip(token):
     last = c.get("https://sys.wildcard.lol/app/my_transactions/tips",headers=head).json()
     if(last == []):
         with open('already_tipped.txt', 'w') as userny:
-            userny.write('[]')
+            userny.write('')
             userny.close()
         roken = remaining(token)
         sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' |')
@@ -231,20 +231,20 @@ def tip(head, castid, userid, amount, username):
             data_username = userny.read()
     else:
         with open('already_tipped.txt', 'w') as userny:
-            userny.write('[]')
+            userny.write('')
             userny.close()
         with open('already_tipped.txt', 'r') as usernys:
             data_username = usernys.read()
     if username not in data_username:
         with open('already_tipped.txt', 'a') as filesny:
-             filesny.write(username)
+             filesny.write(username+",")
              filesny.close()
         if(c.post("https://sys.wildcard.lol/app/tip/cast/"+castid+"/"+str(userid), headers=head,json=finaldat).json()["tip"] == "success"):
-            print("Success Tip: "+username)
+            print("\nSuccess Tip: "+username)
         else:
-            print("Failed Tip "+username)
+            print("\nFailed Tip "+username)
     else:
-        print("already tip "+username)
+        print("\nalready tip "+username)
     
 
 def main():
