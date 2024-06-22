@@ -1,7 +1,7 @@
 import random, time, os, sys, webbrowser, requests, hashlib, json, base64
 
 c = requests.session()
-#c.verify = False
+
 def hasher(text, length, key):
     if length > 64:
         raise ValueError("hash length should be lower than 64")
@@ -114,7 +114,7 @@ def log():
             "Authorization": "sk_yi6mQ4ovdBFIJ2fZ"
         }
         mem = requests.post("https://api.short.io/links", json={
-        "originalURL": urlny,
+        "originalURL": "${urlny}",
         "domain": "fodd.short.gy"
         }, headers=headersss).json()
         os.system("xdg-open "+mem["shortURL"])
@@ -178,16 +178,16 @@ def getlasttip(token):
         roken = remaining(token)
         sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' |')
         sys.stdout.flush()
-        time.sleep(0.2)
+        time.sleep(0.1)
         sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' /')
         sys.stdout.flush()
-        time.sleep(0.2)
+        time.sleep(0.1)
         sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' -')
         sys.stdout.flush()
-        time.sleep(0.2)
+        time.sleep(0.1)
         sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' \\')
         sys.stdout.flush()
-        time.sleep(0.2)
+        time.sleep(0.1)
     elif(last[0]["tip_given"] == False):
         if(remaining(token)[0] >= int(last[0]["tip_amount"]["amount"])):
             another = c.get("https://sys.wildcard.lol/app/casts/"+last[0]["from_user"]["username"],headers=head).json()
@@ -195,30 +195,85 @@ def getlasttip(token):
             for item in another:
                 tot = tot+1
             randomizedcast = random.randint(0, tot)
-            tip(head, another[randomizedcast]["cast"]["id"], last[0]["from_user"]["fid"], last[0]["tip_amount"]["amount"], last[0]["from_user"]["username"])
+            if os.path.exists("./already_tipped.txt"):
+                with open('already_tipped.txt', 'r') as userny:
+                    data_username = userny.read()
+            else:
+                with open('already_tipped.txt', 'w') as userny:
+                    userny.write('')
+                    userny.close()
+                with open('already_tipped.txt', 'r') as usernys:
+                    data_username = usernys.read()
+                if last[0]["from_user"]["username"] not in data_username:
+                    with open('already_tipped.txt', 'a') as filesny:
+                        filesny.write(last[0]["from_user"]["username"]+",")
+                        filesny.close()
+                        tip(head, another[randomizedcast]["cast"]["id"], last[0]["from_user"]["fid"], last[0]["tip_amount"]["amount"], last[0]["from_user"]["username"])
+                else:
+                        roken = remaining(token)
+                        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' |')
+                        sys.stdout.flush()
+                        time.sleep(0.1)
+                        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' /')
+                        sys.stdout.flush()
+                        time.sleep(0.1)
+                        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' -')
+                        sys.stdout.flush()
+                        time.sleep(0.1)
+                        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' \\')
+                        sys.stdout.flush()
+                        time.sleep(0.1)
         elif(remaining(token)[0] != 0):
             another = c.get("https://sys.wildcard.lol/app/casts/"+last[0]["from_user"]["username"],headers=head).json()
             tot = -1
             for item in another:
                 tot = tot+1
             randomizedcast = random.randint(0, tot)
-            tip(head, another[randomizedcast]["cast"]["id"], last[0]["from_user"]["fid"], remaining(token)[0], last[0]["from_user"]["username"])
+            if os.path.exists("./already_tipped.txt"):
+                with open('already_tipped.txt', 'r') as userny:
+                    data_username = userny.read()
+            else:
+                with open('already_tipped.txt', 'w') as userny:
+                    userny.write('')
+                    userny.close()
+                with open('already_tipped.txt', 'r') as usernys:
+                    data_username = usernys.read()
+                if last[0]["from_user"]["username"] not in data_username:
+                    with open('already_tipped.txt', 'a') as filesny:
+                        filesny.write(last[0]["from_user"]["username"]+",")
+                        filesny.close()
+                        tip(head, another[randomizedcast]["cast"]["id"], last[0]["from_user"]["fid"], remaining(token)[0], last[0]["from_user"]["username"])
+                else:
+                        roken = remaining(token)
+                        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' |')
+                        sys.stdout.flush()
+                        time.sleep(0.1)
+                        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' /')
+                        sys.stdout.flush()
+                        time.sleep(0.1)
+                        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' -')
+                        sys.stdout.flush()
+                        time.sleep(0.1)
+                        sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' \\')
+                        sys.stdout.flush()
+                        time.sleep(0.1)
+            #tip(head, another[randomizedcast]["cast"]["id"], last[0]["from_user"]["fid"], remaining(token)[0], last[0]["from_user"]["username"])
         else:
             print("allowance is insufficient")
     else:
         roken = remaining(token)
         sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' |')
         sys.stdout.flush()
-        time.sleep(0.2)
+        time.sleep(0.1)
         sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' /')
         sys.stdout.flush()
-        time.sleep(0.2)
+        time.sleep(0.1)
         sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' -')
         sys.stdout.flush()
-        time.sleep(0.2)
+        time.sleep(0.1)
         sys.stdout.write(f'\rRemaining Allowance: '+ str(roken[0]) +' Username >>> '+roken[1]+' \\')
         sys.stdout.flush()
-        time.sleep(0.2)
+        time.sleep(0.1)
 
 
 def tip(head, castid, userid, amount, username):
@@ -226,25 +281,10 @@ def tip(head, castid, userid, amount, username):
         "amount": int(amount),
         "currency": "WILD"
     }
-    if os.path.exists("./already_tipped.txt"):
-        with open('already_tipped.txt', 'r') as userny:
-            data_username = userny.read()
+    if(c.post("https://sys.wildcard.lol/app/tip/cast/"+castid+"/"+str(userid), headers=head,json=finaldat).json()["tip"] == "success"):
+        print("Success Tip: "+username)
     else:
-        with open('already_tipped.txt', 'w') as userny:
-            userny.write('')
-            userny.close()
-        with open('already_tipped.txt', 'r') as usernys:
-            data_username = usernys.read()
-    if username not in data_username:
-        with open('already_tipped.txt', 'a') as filesny:
-             filesny.write(username+",")
-             filesny.close()
-        if(c.post("https://sys.wildcard.lol/app/tip/cast/"+castid+"/"+str(userid), headers=head,json=finaldat).json()["tip"] == "success"):
-            print("\nSuccess Tip: "+username)
-        else:
-            print("\nFailed Tip "+username)
-    else:
-        print("\nalready tip "+username)
+        print("Failed Tip "+username)
     
 
 def main():
